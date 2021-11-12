@@ -1,11 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFrameworks>netstandard2.0;netstandard2.1;net5.0</TargetFrameworks>
     <Authors>Hamed Fathi</Authors>
     <Company />
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
-    <Version>0.0.1</Version>
+    <Version>0.0.2</Version>
+    <LangVersion>latest</LangVersion>
     <PackageProjectUrl>https://github.com/HamedFathi/Enriched</PackageProjectUrl>
     <RepositoryUrl>https://github.com/HamedFathi/Enriched</RepositoryUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
