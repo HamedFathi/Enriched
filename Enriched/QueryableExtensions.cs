@@ -90,7 +90,7 @@ namespace Enriched.QueryableExtended
 
         public static IQueryable<T> WhereNot<T>(this IQueryable<T> queryable, Expression<Func<T, bool>> predicate)
         {
-            return queryable.Where(predicate.Invert());
+            return queryable.Where(predicate.Not());
         }
     }
 }
