@@ -11,6 +11,12 @@ namespace Enriched.TaskExtended
 {
     public static partial class TaskExtensions
     {
+        private static readonly TaskFactory _taskFactory = new
+            TaskFactory(CancellationToken.None,
+                        TaskCreationOptions.None,
+                        TaskContinuationOptions.None,
+                        TaskScheduler.Default);
+
         public static async Task<IEnumerable<TSource>> AsEnumerable<TSource>(
                                                                   this Task<IEnumerable<TSource>> source)
                                                                   => await source;
@@ -98,6 +104,19 @@ namespace Enriched.TaskExtended
                 );
         }
 
+        public static TResult RunSync<TResult>(this Func<Task<TResult>> func)
+            => _taskFactory
+                .StartNew(func)
+                .Unwrap()
+                .GetAwaiter()
+                .GetResult();
+
+        public static void RunSync(this Func<Task> func)
+            => _taskFactory
+                .StartNew(func)
+                .Unwrap()
+                .GetAwaiter()
+                .GetResult();
         public static async void SafeFireAndForget(this Task @this, bool continueOnCapturedContext = true, Action<Exception> onException = null)
         {
             try
