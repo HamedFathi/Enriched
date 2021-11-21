@@ -114,6 +114,26 @@ namespace Enriched.ListExtended
             return false;
         }
 
+        public static bool AllSafe<T>(this IList<T> list, Func<T, bool> predicate)
+        {
+            return list?.All(predicate) == true;
+        }
+
+        public static bool AnySafe<T>(this IList<T> list, Func<T, bool> predicate)
+        {
+            return list?.Any(predicate) == true;
+        }
+
+        public static bool AllSafe<T>(this IList<T> list)
+        {
+            return list?.All() == true;
+        }
+
+        public static bool AnySafe<T>(this IList<T> list)
+        {
+            return list?.Any() == true;
+        }
+
         public static bool AnyOrNotNull(this List<string> source)
         {
             var hasData = source.Aggregate((a, b) => a + b).Any();

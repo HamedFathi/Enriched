@@ -17,6 +17,26 @@ namespace Enriched.EnumerableExtended
     {
         private static readonly Random Rnd = new Random(Guid.NewGuid().GetHashCode());
 
+        public static bool AllSafe<T>(this IEnumerable<T> enumerable, Func<T, bool> predicate)
+        {
+            return enumerable?.All(predicate) == true;
+        }
+
+        public static bool AnySafe<T>(this IEnumerable<T> enumerable, Func<T, bool> predicate)
+        {
+            return enumerable?.Any(predicate) == true;
+        }
+
+        public static bool AllSafe<T>(this IEnumerable<T> enumerable)
+        {
+            return enumerable?.All() == true;
+        }
+
+        public static bool AnySafe<T>(this IEnumerable<T> enumerable)
+        {
+            return enumerable?.Any() == true;
+        }
+
         public static string Aggregate<T>(this IEnumerable<T> enumeration, Func<T, string> toString, string separator)
         {
             if (toString == null)
@@ -58,6 +78,11 @@ namespace Enriched.EnumerableExtended
             return Enumerable.Any(source.Cast<object>());
         }
 
+        public static bool AnySafe(this IEnumerable source)
+        {
+            return source != null && Enumerable.Any(source.Cast<object>());
+        }
+
         public static bool Any<T>(this IEnumerable<T> @this, params T[] values)
         {
             T[] list = @this.ToArray();
@@ -83,7 +108,7 @@ namespace Enriched.EnumerableExtended
                 if (predicate(item, index))
                     return true;
 
-                index += 1;
+                index++;
             }
 
             return false;

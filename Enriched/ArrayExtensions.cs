@@ -37,6 +37,26 @@ namespace Enriched.ArrayExtended
             return false;
         }
 
+        public static bool AllSafe<T>(this T[] array, Func<T, bool> predicate)
+        {
+            return array?.All(predicate) == true;
+        }
+
+        public static bool AnySafe<T>(this T[] array, Func<T, bool> predicate)
+        {
+            return array?.Any(predicate) == true;
+        }
+
+        public static bool AllSafe<T>(this T[] array)
+        {
+            return array?.All() == true;
+        }
+
+        public static bool AnySafe<T>(this T[] array)
+        {
+            return array?.Any() == true;
+        }
+
         public static void BlockCopy(this Array src, int srcOffset, Array dst, int dstOffset, int count)
         {
             Buffer.BlockCopy(src, srcOffset, dst, dstOffset, count);

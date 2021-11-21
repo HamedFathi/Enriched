@@ -2,6 +2,7 @@ using Enriched.EnumerableExtended;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -17,10 +18,10 @@ namespace Enriched.ObjectExtended
             return Array.IndexOf(values, obj) != -1;
         }
 
-#pragma warning disable IDE0060 // Remove unused parameter
 
+        [SuppressMessage("Redundancy", "RCS1175:Unused this parameter.", Justification = "<Pending>")]
+        [SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "<Pending>")]
         public static Lazy<T> AsLazy<T>(this T obj)
-#pragma warning restore IDE0060 // Remove unused parameter
         {
             return new Lazy<T>();
         }

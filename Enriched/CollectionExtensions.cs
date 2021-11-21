@@ -1,6 +1,8 @@
+using Enriched.EnumerableExtended;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace Enriched.CollectionExtended
@@ -140,6 +142,26 @@ namespace Enriched.CollectionExtended
             }
 
             return true;
+        }
+
+        public static bool AllSafe<T>(this ICollection<T> collection, Func<T, bool> predicate)
+        {
+            return collection?.All(predicate) == true;
+        }
+
+        public static bool AnySafe<T>(this ICollection<T> collection, Func<T, bool> predicate)
+        {
+            return collection?.Any(predicate) == true;
+        }
+
+        public static bool AllSafe<T>(this ICollection<T> collection)
+        {
+            return collection?.All() == true;
+        }
+
+        public static bool AnySafe<T>(this ICollection<T> collection)
+        {
+            return collection?.Any() == true;
         }
 
         public static bool ContainsAny<T>(this ICollection<T> @this, params T[] values)
