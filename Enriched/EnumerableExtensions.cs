@@ -2005,10 +2005,9 @@ namespace Enriched.EnumerableExtended
             return new ReadOnlyCollection<TDestination>(sourceAsDestination);
         }
 
-        public static string ToString(this IEnumerable<string> strs)
+        public static string ToText(this IEnumerable<string> strs)
         {
-            var text = strs.ToStringBuilder().ToString();
-            return text;
+            return strs.ToStringBuilder().ToString();
         }
 
         public static StringBuilder ToStringBuilder(this IEnumerable<string> strs)
@@ -2019,6 +2018,22 @@ namespace Enriched.EnumerableExtended
                 sb.AppendLine(str);
             }
             return sb;
+        }
+
+        public static bool TryGetNonEnumeratedCount<T>(this IEnumerable<T> enumerable, out int count)
+        {
+            count = 0;
+            if (enumerable is ICollection<T> collection)
+            {
+                count = collection.Count;
+                return true;
+            }
+            if (enumerable is IReadOnlyCollection<T> roCollection)
+            {
+                count = roCollection.Count;
+                return true;
+            }
+            return false;
         }
 
         public static IEnumerable<T> Union<T>(this IEnumerable<IEnumerable<T>> enumeration)
