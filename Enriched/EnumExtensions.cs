@@ -85,5 +85,14 @@ namespace Enriched.EnumExtended
         {
             return Array.IndexOf(values, @this) == -1;
         }
+        public static T Parse<T>(this Enum @enum, string name, bool ignoreCase = false) where T : Enum
+        {
+            if (@enum is null)
+            {
+                throw new ArgumentNullException(nameof(@enum));
+            }
+
+            return (T)Enum.Parse(typeof(T), name, ignoreCase);
+        }
     }
 }

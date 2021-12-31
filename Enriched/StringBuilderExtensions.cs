@@ -137,6 +137,20 @@ namespace Enriched.StringBuilderExtended
             return @this;
         }
 
+        public static void AppendLine(this StringBuilder builder, string value, int counter, bool tab = true)
+        {
+            if (counter <= 0) builder.AppendLine(value);
+            var space = tab ? new string('\t', counter) : new string(' ', counter);
+            builder.AppendLine($"{space}{value}");
+        }
+
+        public static void Append(this StringBuilder builder, string value, int counter, bool tab = true)
+        {
+            if (counter <= 0) builder.Append(value);
+            var space = tab ? new string('\t', counter) : new string(' ', counter);
+            builder.Append($"{space}{value}");
+        }
+
         public static StringBuilder Reverse(this StringBuilder sb)
         {
             var start = 0;
@@ -180,6 +194,39 @@ namespace Enriched.StringBuilderExtended
         public static string Substring(this StringBuilder @this, int startIndex, int length)
         {
             return @this.ToString(startIndex, length);
+        }
+
+        public static bool IsNotNull(this StringBuilder stringBuilder)
+        {
+            return !stringBuilder.IsNull();
+        }
+        public static bool IsNull(this StringBuilder stringBuilder)
+        {
+            return stringBuilder == null;
+        }
+        public static bool IsNotEmpty(this StringBuilder stringBuilder)
+        {
+            return !stringBuilder.IsEmpty();
+        }
+        public static bool IsEmpty(this StringBuilder stringBuilder)
+        {
+            return stringBuilder.ToString() == string.Empty;
+        }
+        public static bool IsNotNullOrEmpty(this StringBuilder stringBuilder)
+        {
+            return !stringBuilder.IsNullOrEmpty();
+        }
+        public static bool IsNullOrEmpty(this StringBuilder stringBuilder)
+        {
+            return stringBuilder == null || string.IsNullOrEmpty(stringBuilder.ToString());
+        }
+        public static bool IsNotNullOrWhiteSpace(this StringBuilder stringBuilder)
+        {
+            return !stringBuilder.IsNullOrWhiteSpace();
+        }
+        public static bool IsNullOrWhiteSpace(this StringBuilder stringBuilder)
+        {
+            return stringBuilder == null || string.IsNullOrWhiteSpace(stringBuilder.ToString());
         }
     }
 }

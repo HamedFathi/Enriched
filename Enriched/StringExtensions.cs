@@ -187,6 +187,11 @@ namespace Enriched.StringExtended
             return source.IndexOf(str, StringComparison.OrdinalIgnoreCase) >= 0;
         }
 
+        public static string ConvertNewLineToWhiteSpace(this string str)
+        {
+            return Regex.Replace(str, @"\t|\n|\r", " ").Trim();
+        }
+
         public static string ConvertPersianNumbersToEnglish(this string input)
         {
             if (string.IsNullOrEmpty(input)) return string.Empty;
@@ -1785,6 +1790,13 @@ namespace Enriched.StringExtended
         {
             return @this.ToBytes(Encoding.UTF8);
         }
+        public static string ToCamelCase(this string str)
+        {
+            if (string.IsNullOrEmpty(str))
+                return str;
+            var output = str.ToTitleCase();
+            return char.ToLower(output[0]) + output.Substring(1);
+        }
 
         public static IEnumerable<char> ToChars(this string str)
         {
@@ -1878,7 +1890,6 @@ namespace Enriched.StringExtended
         {
             return new MemoryStream(str.ToByteArray<TEncoding>());
         }
-
         public static string ToTitleCase(this string @this, CultureInfo culture)
         {
             return culture.TextInfo.ToTitleCase(@this);
@@ -1887,6 +1898,10 @@ namespace Enriched.StringExtended
         public static string ToTitleCase(this string @this)
         {
             return Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(@this);
+        }
+        public static string ToUnderscoreCase(this string str)
+        {
+            return string.Concat(str.Select((x, i) => i > 0 && char.IsUpper(x) ? "_" + x.ToString() : x.ToString())).ToLower();
         }
 
         public static string ToUnicodeString(this string text, bool ignoreWhiteSpaces = false)
