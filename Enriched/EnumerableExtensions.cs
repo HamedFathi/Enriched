@@ -257,6 +257,22 @@ namespace Enriched.EnumerableExtended
             return count;
         }
 
+        public static IEnumerable<(T1 left, T2 right)> Cartesian<T1, T2>(this (IEnumerable<T1>, IEnumerable<T2>) seqs)
+        {
+            foreach (var a in seqs.Item1)
+                foreach (var b in seqs.Item2)
+                    yield return (a, b);
+        }
+
+        public static IEnumerable<(T1 left, T2 right)> Cartesian<T1, T2>(this IEnumerable<T1> left, IEnumerable<T2> right)
+            => (left, right).Cartesian();
+
+        private static IEnumerable<int> InfiniteSequence(int start)
+        {
+            while (true)
+                yield return start++;
+        }
+
         public static IEnumerable<IEnumerable<T>> Combinations<T>(this IEnumerable<T> source, int select, bool repetition = false)
         {
             if (source == null || @select < 0)
@@ -2132,11 +2148,22 @@ namespace Enriched.EnumerableExtended
             return l;
         }
 
-        private static IEnumerable<TSource> WithoutIterator<TSource>(IEnumerable<TSource> source,
-                                                                                                                                                                                                            IEnumerable<TSource> elementsToRemove, IEqualityComparer<TSource> comparer)
+        private static IEnumerable<TSource> WithoutIterator<TSource>(IEnumerable<TSource> source, IEnumerable<TSource> elementsToRemove, IEqualityComparer<TSource> comparer)
         {
             HashSet<TSource> elementsToRemoveSet = new HashSet<TSource>(elementsToRemove, comparer);
             return source.Where(elem => !elementsToRemoveSet.Contains(elem));
+        }
+
+        public static IEnumerable<(T1 left, T2 right)> Zip<T1, T2>(this (IEnumerable<T1>, IEnumerable<T2>) seqs)
+        {
+            using var iterLeft = seqs.Item1.GetEnumerator();
+            using var iterRight = seqs.Item2.GetEnumerator();
+            bool leftAdv, rightAdv;
+            while ((leftAdv = iterLeft.MoveNext()) & (rightAdv = iterRight.MoveNext()))
+                yield return (iterLeft.Current, iterRight.Current);
+
+            if (leftAdv != rightAdv)
+                throw new InvalidOperationException("Collections should have the same size");
         }
     }
 }
