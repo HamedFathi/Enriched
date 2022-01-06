@@ -139,16 +139,28 @@ namespace Enriched.StringBuilderExtended
 
         public static void AppendLine(this StringBuilder builder, string value, int counter, bool tab = true)
         {
-            if (counter <= 0) builder.AppendLine(value);
-            var space = tab ? new string('\t', counter) : new string(' ', counter);
-            builder.AppendLine($"{space}{value}");
+            if (counter <= 0)
+            {
+                builder.AppendLine(value);
+            }
+            else
+            {
+                var space = tab ? new string('\t', counter) : new string(' ', counter);
+                builder.AppendLine($"{space}{value}");
+            }
         }
 
         public static void Append(this StringBuilder builder, string value, int counter, bool tab = true)
         {
-            if (counter <= 0) builder.Append(value);
-            var space = tab ? new string('\t', counter) : new string(' ', counter);
-            builder.Append($"{space}{value}");
+            if (counter <= 0)
+            {
+                builder.Append(value);
+            }
+            else
+            {
+                var space = tab ? new string('\t', counter) : new string(' ', counter);
+                builder.Append($"{space}{value}");
+            }
         }
 
         public static StringBuilder Reverse(this StringBuilder sb)
