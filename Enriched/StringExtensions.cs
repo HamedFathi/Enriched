@@ -1363,6 +1363,11 @@ namespace Enriched.StringExtended
             return @this;
         }
 
+        public static string ReplaceExceptLastOccurrence(this string input, char pattern, char replacement)
+        {
+            return Regex.Replace(input, $"[{pattern}](?=.*[{pattern}])", replacement.ToString());
+        }
+
         public static string ReplaceFirst(this string @this, string oldValue, string newValue)
         {
             var startIndex = @this.IndexOf(oldValue, StringComparison.Ordinal);
