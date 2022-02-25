@@ -426,5 +426,11 @@ namespace Enriched.StreamExtended
         {
             stream.Write(bytes, 0, bytes.Length);
         }
+
+        public static void WriteFile(this Stream stream, string filePath, FileMode fileMode = FileMode.Create)
+        {
+            using var fileStream = new FileStream(filePath, fileMode, FileAccess.Write);
+            stream.CopyTo(fileStream);
+        }
     }
 }

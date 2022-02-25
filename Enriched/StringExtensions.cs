@@ -346,6 +346,22 @@ namespace Enriched.StringExtended
             }
         }
 
+        public static string FirstCharToUpper(this string input) =>
+            input switch
+            {
+                null => throw new ArgumentNullException(nameof(input)),
+                "" => throw new ArgumentException($"{nameof(input)} cannot be empty", nameof(input)),
+                _ => input[0].ToString().ToUpper() + input.Substring(1)
+            };
+
+        public static string FirstCharToLower(this string input) =>
+            input switch
+            {
+                null => throw new ArgumentNullException(nameof(input)),
+                "" => throw new ArgumentException($"{nameof(input)} cannot be empty", nameof(input)),
+                _ => input[0].ToString().ToLower() + input.Substring(1)
+            };
+
         public static string FixPersianChars(string value)
         {
             return value
@@ -1731,13 +1747,24 @@ namespace Enriched.StringExtended
                 return s;
             return s.Substring(0, index);
         }
-
-        public static string SubstringUntilLast(this string s, string sub, StringComparison comparsion = StringComparison.Ordinal)
+        public static string SubstringUntilLast(this string s, string sub, StringComparison comparison = StringComparison.Ordinal)
         {
-            var index = s.LastIndexOf(sub, comparsion);
+            var index = s.LastIndexOf(sub, comparison);
             if (index < 0)
                 return s;
             return s.Substring(0, index);
+        }
+
+        public static string ToAlphaNumericOnly(this string text, string replacement = "")
+        {
+            var regex = new Regex("[^a-zA-Z0-9]");
+            return regex.Replace(text, replacement);
+        }
+
+        public static string ToAlphaNumericUnderlineOnly(this string text, string replacement = "")
+        {
+            var regex = new Regex("[^a-zA-Z0-9_]");
+            return regex.Replace(text, replacement);
         }
 
         public static byte[] ToAsciiByteArray(this string str)
@@ -1822,9 +1849,9 @@ namespace Enriched.StringExtended
         public static void ToFile(this string fileText, FileInfo fileInfo)
         {
             if (fileInfo == null)
-                throw new ArgumentNullException("FileInfo cannot be null");
+                throw new ArgumentNullException(nameof(fileInfo));
 
-            if (!fileInfo.Directory.Exists)
+            if (fileInfo.Directory != null && !fileInfo.Directory.Exists)
             {
                 fileInfo.Directory.Create();
             }

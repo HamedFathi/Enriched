@@ -150,6 +150,17 @@ namespace Enriched.StringBuilderExtended
             }
         }
 
+        public static void AppendNewLine(this StringBuilder builder, int count = 1)
+        {
+            if (count > 0)
+            {
+                for (int i = 0; i < count; i++)
+                {
+                    builder.AppendLine();
+                }
+            }
+        }
+
         public static void Append(this StringBuilder builder, string value, int counter, bool tab = true)
         {
             if (counter <= 0)
@@ -169,9 +180,7 @@ namespace Enriched.StringBuilderExtended
             var end = sb.Length - 1;
             while (start < end)
             {
-                var temp = sb[start];
-                sb[start] = sb[end];
-                sb[end] = temp;
+                (sb[start], sb[end]) = (sb[end], sb[start]);
                 start++;
                 end--;
             }
