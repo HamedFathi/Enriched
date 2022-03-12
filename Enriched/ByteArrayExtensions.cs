@@ -104,6 +104,12 @@ namespace Enriched.ByteArrayExtended
             return @this.ToStream().ToFileStream(filePath, fileMode, fileAccess);
         }
 
+
+        public static void ToFile(this byte[] data, string filePath)
+        {
+            File.WriteAllBytes(filePath, data);
+        }
+
         public static string ToHexString(this byte[] byteArray)
         {
             string result = string.Empty;
