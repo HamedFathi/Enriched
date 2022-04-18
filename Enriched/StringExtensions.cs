@@ -1094,6 +1094,15 @@ namespace Enriched.StringExtended
             return @this.RegexMatches(pattern, RegexOptions.None);
         }
 
+        public static string RemoveAccents(string input)
+        {
+            return new string(input
+                .Normalize(System.Text.NormalizationForm.FormD)
+                .ToCharArray()
+                .Where(c => CharUnicodeInfo.GetUnicodeCategory(c) != UnicodeCategory.NonSpacingMark)
+                .ToArray());
+        }
+
         public static string RemoveAll(this string source, params string[] removeStrings)
         {
             var v = source;
@@ -1913,15 +1922,9 @@ namespace Enriched.StringExtended
             return secureString;
         }
 
-        public static Stream ToStream(this string str)
-        {
-            return str.ToStream<ASCIIEncoding>();
-        }
+        public static Stream ToStream(this string value, Encoding encoding = null)
+            => new MemoryStream((encoding ?? Encoding.UTF8).GetBytes(value ?? string.Empty));
 
-        public static Stream ToStream<TEncoding>(this string str) where TEncoding : Encoding
-        {
-            return new MemoryStream(str.ToByteArray<TEncoding>());
-        }
         public static string ToTitleCase(this string @this, CultureInfo culture)
         {
             return culture.TextInfo.ToTitleCase(@this);
