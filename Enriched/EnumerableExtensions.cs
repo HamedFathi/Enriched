@@ -17,6 +17,36 @@ namespace Enriched.EnumerableExtended
     {
         private static readonly Random Rnd = new Random(Guid.NewGuid().GetHashCode());
 
+        public static IEnumerable<T> Traverse<T>(this IEnumerable<T> source, Func<T, IEnumerable<T>> selector)
+        {
+            foreach (T item in source)
+            {
+                yield return item;
+                IEnumerable<T> children = selector(item);
+                foreach (T child in children.Traverse(selector))
+                {
+                    yield return child;
+                }
+            }
+        }
+        public static IEnumerable<T> Flatten<T>(this IEnumerable<T> sequence, Func<T, IEnumerable<T>> childFetcher)
+        {
+            var itemsToYield = new Queue<T>(sequence);
+            while (itemsToYield.Count > 0)
+            {
+                var item = itemsToYield.Dequeue();
+                yield return item;
+
+                var children = childFetcher(item);
+                if (children != null)
+                {
+                    foreach (var child in children)
+                    {
+                        itemsToYield.Enqueue(child);
+                    }
+                }
+            }
+        }
         public static bool AllSafe<T>(this IEnumerable<T> enumerable, Func<T, bool> predicate)
         {
             return enumerable?.All(predicate) == true;

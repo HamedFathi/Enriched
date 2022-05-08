@@ -21,7 +21,41 @@ namespace Enriched.StringExtended
     public static class StringExtensions
     {
         private static readonly Pluralizer pluralizer = new Pluralizer();
+        private static readonly Regex TabOrWhiteSpaceRegex = new(@"(\s*\\\$tb(\d+)\s*)|(\s*\\\$ws(\d+)\s*)", RegexOptions.Compiled);
 
+        public static string TabOrWhiteSpaceHandler(this string text,
+            StringSplitOptions stringSplitOptions = StringSplitOptions.None)
+        {
+            // \$tb3 or \$ws13
+            if (string.IsNullOrWhiteSpace(text))
+                throw new ArgumentException("Value cannot be null or whitespace.", nameof(text));
+
+            var sb = new StringBuilder();
+            var lines = text.Trim().Split(new[] { "\r\n", "\r", "\n" }, stringSplitOptions);
+            foreach (var line in lines)
+            {
+                var txt = line.Trim();
+                var matches = TabOrWhiteSpaceRegex.Matches(txt);
+                foreach (Match match in matches)
+                {
+                    var gr2 = match.Groups[2].Value;
+                    var gr4 = match.Groups[4].Value;
+                    if (!string.IsNullOrEmpty(gr2))
+                    {
+                        txt = txt.Replace(match.Value, new string('\t', Convert.ToInt32(gr2)));
+                    }
+
+                    if (!string.IsNullOrEmpty(gr4))
+                    {
+                        txt = txt.Replace(match.Value, new string(' ', Convert.ToInt32(gr4)));
+                    }
+                }
+
+                sb.AppendLine(txt);
+            }
+
+            return sb.ToString();
+        }
         public static DirectoryInfo AsDirectoryInfo(this string @this)
         {
             if (@this.IsNullOrEmpty()) throw new ArgumentNullException(nameof(@this), $"{nameof(@this)} path is null or empty");
@@ -2013,6 +2047,12 @@ namespace Enriched.StringExtended
             var doc = new XmlDocument();
             doc.LoadXml(xml);
             return doc.DocumentElement;
+        }
+        public static string ToXmlAttributeString(this string text)
+        {
+            var attr = new XAttribute("x", text).ToString();
+            var val = attr.Substring(2).Trim('\"');
+            return val;
         }
 
         public static string Trim(this string s, string sub, StringComparison comparison = StringComparison.Ordinal)

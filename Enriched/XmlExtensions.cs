@@ -44,16 +44,19 @@ namespace Enriched.XmlExtended
 
         public static string FormatXmlText(this string xmlText)
         {
-            var document = new XmlDocument();
-            document.Load(new StringReader(xmlText));
-
-            var builder = new StringBuilder();
-            using (var writer = new XmlTextWriter(new StringWriter(builder)))
+            var stringBuilder = new StringBuilder();
+            var element = XElement.Parse(xmlText);
+            var settings = new XmlWriterSettings
             {
-                writer.Formatting = Formatting.Indented;
-                document.Save(writer);
+                OmitXmlDeclaration = true,
+                Indent = true,
+                NewLineOnAttributes = true
+            };
+            using (var xmlWriter = XmlWriter.Create(stringBuilder, settings))
+            {
+                element.Save(xmlWriter);
             }
-            return xmlText;
+            return stringBuilder.ToString();
         }
 
         public static string GetAttribute(this XmlNode node, string attributeName)

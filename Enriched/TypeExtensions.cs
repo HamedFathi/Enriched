@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
@@ -10,6 +11,16 @@ namespace Enriched.TypeExtended
 {
     public static class TypeExtensions
     {
+        public static LambdaExpression CreateLambdaExpression(this Type type, string propertyName)
+        {
+            var param = Expression.Parameter(type, "x");
+            Expression body = param;
+            foreach (var member in propertyName.Split('.'))
+            {
+                body = Expression.PropertyOrField(body, member);
+            }
+            return Expression.Lambda(body, param);
+        }
         public static T CreateGenericTypeInstance<T>(this Type genericType, params Type[] typeArguments) where T : class
         {
             var constructedType = genericType.MakeGenericType(typeArguments);
