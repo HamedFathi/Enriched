@@ -196,7 +196,6 @@ namespace Enriched.StreamExtended
                 yield return buffer;
             }
         }
-#if NETSTANDARD2_1
         public static async IAsyncEnumerable<byte[]> ReadBlockAsBytesAsync(this Stream stream, int bufferSize = 1024)
         {
             var buffer = new byte[bufferSize];
@@ -207,7 +206,7 @@ namespace Enriched.StreamExtended
                 yield return buffer;
             }
         }
-#endif
+
         public static string ReadBlockAsString(this Stream stream, int bufferSize = 1024,
                                     EncodingType encoding = EncodingType.UTF8)
         {
@@ -239,7 +238,6 @@ namespace Enriched.StreamExtended
             var text = sb.ToString();
             return text;
         }
-#if NETSTANDARD2_1
         public static async IAsyncEnumerable<string> ReadBlockAsync(this Stream stream, int bufferSize = 1024,
                                     EncodingType encoding = EncodingType.UTF8)
         {
@@ -251,7 +249,6 @@ namespace Enriched.StreamExtended
                 yield return buffer.ToText(0, count, encoding);
             }
         }
-#endif
         public static async void ReadBlockAsync(this Stream stream, Action<string> action, int bufferSize = 1024,
                                     EncodingType encoding = EncodingType.UTF8)
         {

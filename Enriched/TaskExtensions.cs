@@ -17,6 +17,77 @@ namespace Enriched.TaskExtended
                         TaskContinuationOptions.None,
                         TaskScheduler.Default);
 
+        public static async Task<IEnumerable<T>> ForEachAsync<T>(this IEnumerable<T> source, Func<T, Task> action, CancellationToken cancellationToken = default)
+        {
+            if (source is not null)
+            {
+                foreach (var item in source)
+                {
+                    cancellationToken.ThrowIfCancellationRequested();
+                    await action.Invoke(item).ConfigureAwait(false);
+                }
+            }
+
+            return source;
+        }
+        public static async Task WaitAsync(this Task task, TimeSpan timeout)
+        {
+            using var timeoutCancellationTokenSource = new CancellationTokenSource();
+            var completedTask = await Task.WhenAny(task, Task.Delay(timeout, timeoutCancellationTokenSource.Token)).ConfigureAwait(false);
+            if (completedTask == task)
+            {
+                timeoutCancellationTokenSource.Cancel();
+                await task.ConfigureAwait(false);
+            }
+            else
+            {
+                throw new TimeoutException();
+            }
+        }
+
+        public static async Task<TResult> WaitAsync<TResult>(this Task<TResult> task, TimeSpan timeout)
+        {
+            using var timeoutCancellationTokenSource = new CancellationTokenSource();
+            var completedTask = await Task.WhenAny(task, Task.Delay(timeout, timeoutCancellationTokenSource.Token)).ConfigureAwait(false);
+            if (completedTask == task)
+            {
+                timeoutCancellationTokenSource.Cancel();
+                return await task.ConfigureAwait(false);
+            }
+            else
+            {
+                throw new TimeoutException();
+            }
+        }
+        public static async Task<IEnumerable<TResult>> SelectAsync<TSource, TResult>(this IEnumerable<TSource> source, Func<TSource, Task<TResult>> asyncSelector, CancellationToken cancellationToken = default)
+        {
+            if (source is not null)
+            {
+                var result = new List<TResult>();
+                foreach (var item in source)
+                {
+                    cancellationToken.ThrowIfCancellationRequested();
+                    result.Add(await asyncSelector(item).ConfigureAwait(false));
+                }
+
+                return result;
+            }
+
+            return null;
+        }
+
+        public static void Remove<T>(this ICollection<T> collection, Func<T, bool> predicate)
+        {
+            for (var i = collection.Count - 1; i >= 0; i--)
+            {
+                var element = collection.ElementAt(i);
+                if (predicate(element))
+                {
+                    collection.Remove(element);
+                }
+            }
+        }
+
         public static async Task<IEnumerable<TSource>> AsEnumerable<TSource>(
                                                                   this Task<IEnumerable<TSource>> source)
                                                                   => await source;

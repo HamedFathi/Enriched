@@ -56,6 +56,25 @@ namespace Enriched.StringExtended
 
             return sb.ToString();
         }
+
+        public static bool EqualsIgnoreCase(this string a, string b)
+      => string.Equals(a, b, StringComparison.OrdinalIgnoreCase);
+
+        public static bool StartsWithIgnoreCase(this string a, string b)
+            => a?.StartsWith(b, StringComparison.OrdinalIgnoreCase) ?? false;
+
+        public static bool EndsWithIgnoreCase(this string a, string b)
+            => a?.EndsWith(b, StringComparison.OrdinalIgnoreCase) ?? false;
+
+        public static bool ContainsIgnoreCase(this string a, string b)
+            => a?.IndexOf(b, StringComparison.OrdinalIgnoreCase) >= 0;
+
+        public static string ReplaceIgnoreCase(this string input, string pattern, string replacement)
+            => Regex.Replace(input, pattern, replacement, RegexOptions.IgnoreCase);
+
+        public static string GetValueOrDefault(this string input, string defaultValue = default, bool whitespaceAsEmpty = true)
+            => whitespaceAsEmpty ? (string.IsNullOrWhiteSpace(input) ? defaultValue : input) : (string.IsNullOrEmpty(input) ? defaultValue : input);
+
         public static DirectoryInfo AsDirectoryInfo(this string @this)
         {
             if (@this.IsNullOrEmpty()) throw new ArgumentNullException(nameof(@this), $"{nameof(@this)} path is null or empty");
@@ -214,13 +233,6 @@ namespace Enriched.StringExtended
             return str.IndexOf(ch) != -1;
         }
 
-        public static bool ContainsIgnoreCase(this string source, string str)
-        {
-            if (string.IsNullOrEmpty(str) || string.IsNullOrEmpty(source))
-                return false;
-            return source.IndexOf(str, StringComparison.OrdinalIgnoreCase) >= 0;
-        }
-
         public static string ConvertNewLineToWhiteSpace(this string str)
         {
             return Regex.Replace(str, @"\t|\n|\r", " ").Trim();
@@ -287,11 +299,6 @@ namespace Enriched.StringExtended
         public static bool DoesNotStartWith(this string input, string value, StringComparison comparisonType)
         {
             return string.IsNullOrEmpty(value) || input.IsNullOrEmptyOrWhiteSpace() || !input.StartsWith(value, comparisonType);
-        }
-
-        public static bool EqualsIgnoreCase(this string @this, string comparedString)
-        {
-            return @this.Equals(comparedString, StringComparison.OrdinalIgnoreCase);
         }
 
         public static string EscapeXml(this string @this)

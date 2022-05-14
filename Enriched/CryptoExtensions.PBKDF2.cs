@@ -1,5 +1,4 @@
-﻿#if NETSTANDARD2_1
-using Enriched.ByteArrayExtended;
+﻿using Enriched.ByteArrayExtended;
 using Enriched.StreamExtended;
 using Enriched.StringExtended;
 using System.IO;
@@ -48,4 +47,3 @@ namespace Enriched.Cryptography
 
     }
 }
-#endif

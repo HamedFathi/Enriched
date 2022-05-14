@@ -1,12 +1,6 @@
-﻿#if NET5_0_OR_GREATER
-using Enriched.EnumerableExtended;
-using Enriched.QueueExtended;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace Enriched.TaskExtended
@@ -107,4 +101,3 @@ namespace Enriched.TaskExtended
         }
     }
 }
-#endif

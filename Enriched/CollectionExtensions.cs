@@ -2,7 +2,6 @@ using Enriched.EnumerableExtended;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace Enriched.CollectionExtended
@@ -232,21 +231,6 @@ namespace Enriched.CollectionExtended
             return @this != null && @this.Count != 0;
         }
 
-        public static void RemoveAll<T>(this ICollection<T> collection, Func<T, bool> predicate)
-        {
-            if (collection == null) throw new ArgumentNullException(nameof(collection));
-            if (predicate == null) throw new ArgumentNullException(nameof(predicate));
-
-            for (var index = collection.Count - 1; index >= 0; index--)
-            {
-                var currentItem = collection.ElementAt(index);
-                if (predicate(currentItem))
-                {
-                    collection.Remove(currentItem);
-                }
-            }
-        }
-
         public static void RemoveAll<T>(this ICollection<T> collection, IEnumerable<T> values)
         {
             if (collection == null) throw new ArgumentNullException(nameof(collection));
@@ -258,6 +242,17 @@ namespace Enriched.CollectionExtended
             }
         }
 
+        public static void Remove<T>(this ICollection<T> collection, Func<T, bool> predicate)
+        {
+            for (var i = collection.Count - 1; i >= 0; i--)
+            {
+                var element = collection.ElementAt(i);
+                if (predicate(element))
+                {
+                    collection.Remove(element);
+                }
+            }
+        }
         public static IEnumerable<T> RemoveDuplicates<T>(this ICollection<T> @this)
         {
             return new HashSet<T>(@this).ToList();

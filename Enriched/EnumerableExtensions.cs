@@ -17,6 +17,11 @@ namespace Enriched.EnumerableExtended
     {
         private static readonly Random Rnd = new Random(Guid.NewGuid().GetHashCode());
 
+        public static int GetCount<T>(this IEnumerable<T> source, Func<T, bool> predicate = null)
+            => source?.Count(predicate!) ?? 0;
+
+        public static long GetLongCount<T>(this IEnumerable<T> source, Func<T, bool> predicate = null)
+            => source?.LongCount(predicate!) ?? 0;
         public static IEnumerable<T> Traverse<T>(this IEnumerable<T> source, Func<T, IEnumerable<T>> selector)
         {
             foreach (T item in source)
@@ -2003,17 +2008,6 @@ namespace Enriched.EnumerableExtended
                 item => item.Key,
                 item => item);
         }
-
-#if NETSTANDARD2_0
-        public static HashSet<T> ToHashSet<T>(this IEnumerable<T> source)
-        {
-            return new HashSet<T>(source);
-        }
-        public static HashSet<T> ToHashSet<T>(this IEnumerable<T> source, IEqualityComparer<T> comparer)
-        {
-            return new HashSet<T>(source, comparer);
-        }
-#endif
 
         public static List<TResult> ToList<TSource, TResult>(this IEnumerable<TSource> source, Func<TSource, TResult> selector)
         {
