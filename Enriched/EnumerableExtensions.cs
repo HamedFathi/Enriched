@@ -52,6 +52,64 @@ namespace Enriched.EnumerableExtended
                 }
             }
         }
+
+
+        public static decimal FindClosest(this IEnumerable<decimal> sequence, decimal value)
+        {
+            var diffList = sequence.Select(x => new { n = x, diff = Math.Abs(x - value) });
+            var result = diffList.Where(x => x.diff == diffList.Select(y => y.diff).Min()).First();
+            return result.n;
+        }
+
+        public static decimal FindFarthest(this IEnumerable<decimal> sequence, decimal value)
+        {
+            var diffList = sequence.Select(x => new { n = x, diff = Math.Abs(x - value) });
+            var result = diffList.Where(x => x.diff == diffList.Select(y => y.diff).Max()).First();
+            return result.n;
+        }
+
+        public static long FindClosest(this IEnumerable<long> sequence, long value)
+        {
+            var diffList = sequence.Select(x => new { n = x, diff = Math.Abs(x - value) });
+            var result = diffList.Where(x => x.diff == diffList.Select(y => y.diff).Min()).First();
+            return result.n;
+        }
+
+        public static long FindFarthest(this IEnumerable<long> sequence, long value)
+        {
+            var diffList = sequence.Select(x => new { n = x, diff = Math.Abs(x - value) });
+            var result = diffList.Where(x => x.diff == diffList.Select(y => y.diff).Max()).First();
+            return result.n;
+        }
+
+        public static double FindClosest(this IEnumerable<double> sequence, double value)
+        {
+            var diffList = sequence.Select(x => new { n = x, diff = Math.Abs(x - value) });
+            var result = diffList.Where(x => x.diff == diffList.Select(y => y.diff).Min()).First();
+            return result.n;
+        }
+
+        public static double FindFarthest(this IEnumerable<double> sequence, double value)
+        {
+            var diffList = sequence.Select(x => new { n = x, diff = Math.Abs(x - value) });
+            var result = diffList.Where(x => x.diff == diffList.Select(y => y.diff).Max()).First();
+            return result.n;
+        }
+
+        public static int FindClosest(this IEnumerable<int> sequence, int value)
+        {
+            var diffList = sequence.Select(x => new { n = x, diff = Math.Abs(x - value) });
+            var result = diffList.Where(x => x.diff == diffList.Select(y => y.diff).Min()).First();
+            return result.n;
+        }
+
+        public static int FindFarthest(this IEnumerable<int> sequence, int value)
+        {
+            var diffList = sequence.Select(x => new { n = x, diff = Math.Abs(x - value) });
+            var result = diffList.Where(x => x.diff == diffList.Select(y => y.diff).Max()).First();
+            return result.n;
+        }
+
         public static bool AllSafe<T>(this IEnumerable<T> enumerable, Func<T, bool> predicate)
         {
             return enumerable?.All(predicate) == true;
